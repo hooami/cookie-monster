@@ -29,13 +29,14 @@ class _GroupsState extends State<Groups> {
         future: GroupModel.getMyGroups("32316851-0ffd-4643-88f8-cf035445ed40"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _groupsBody(snapshot);
+            return _groupsBody(context, snapshot);
           }
           return Scaffold();
         });
   }
 
-  Scaffold _groupsBody(AsyncSnapshot<List<GroupModel?>> snapshot) {
+  Scaffold _groupsBody(
+      BuildContext context, AsyncSnapshot<List<GroupModel?>> snapshot) {
     if (snapshot.data == null) {
       throw Exception("expected non-null");
     }
@@ -46,18 +47,23 @@ class _GroupsState extends State<Groups> {
     return Scaffold(
       appBar: TopBar(index: 0),
       body: Column(
-        children: [_searchInput(), _groupsList(groups)],
+        children: [_searchInput(), _groupsList(context, groups)],
       ),
     );
   }
 
-  Widget _groupsList(List<GroupModel> groups) {
+  Widget _groupsList(BuildContext context, List<GroupModel> groups) {
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height -
+                  TopBar(index: 0).preferredSize.height -
+                  190,
+            ),
             child: ListView.separated(
               separatorBuilder: (context, index) => SizedBox(
                 height: 15,
