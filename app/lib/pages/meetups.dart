@@ -58,7 +58,6 @@ class _MeetupsPageState extends State<MeetupsPage> {
 
     initialised = true;
     _data = data;
-    print(data.meetups.toString());
   }
 
   Scaffold _meetupsPageBody(BuildContext context) {
@@ -78,8 +77,6 @@ class _MeetupsPageState extends State<MeetupsPage> {
               final time = timeFormatter.format(meetups[parentIndex].datetime);
               final meetupData =
                   _data!.formatMeetupDisplay(meetups[parentIndex]);
-
-              print(meetupData.toString());
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
