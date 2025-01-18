@@ -1,5 +1,4 @@
-// import 'package:app/pages/groups.dart';
-import 'package:app/pages/meetups.dart';
+import 'package:app/pages/groups.dart';
 import 'package:flutter/material.dart';
 // import 'package:mongo_dart/mongo_dart.dart';
 
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
       ),
-      home: MeetupsPage(),
+      home: Groups(),
     );
   }
 }
