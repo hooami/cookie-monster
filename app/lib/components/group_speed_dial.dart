@@ -4,7 +4,12 @@ import 'package:app/pages/add_group.dart';
 import 'package:app/components/group_dialog.dart';
 
 class GroupSpeedDial extends StatelessWidget {
-  const GroupSpeedDial({Key? key}) : super(key: key);
+  final Function refreshParentPage;
+
+  const GroupSpeedDial({
+    super.key,
+    required this.refreshParentPage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,11 @@ class GroupSpeedDial extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddGroupPage()),
+              MaterialPageRoute(
+                builder: (context) => AddGroupPage(
+                  refreshParentPage: refreshParentPage,
+                ),
+              ),
             );
           },
         ),
