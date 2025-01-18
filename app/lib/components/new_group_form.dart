@@ -1,4 +1,6 @@
+import 'package:app/models/group.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/v4.dart';
 
 // Create a Form widget.
 class NewGroupForm extends StatefulWidget {
@@ -12,6 +14,19 @@ class NewGroupForm extends StatefulWidget {
 
 class NewGroupFormState extends State<NewGroupForm> {
   final _formKey = GlobalKey<FormState>();
+  final groupNameController = TextEditingController();
+
+  Future<void> _submitForm() async {
+    groupNameController.text;
+    var model = GroupModel(
+      uuid: UuidV4().generate(),
+      title: groupNameController.text,
+      members: List.from(["32316851-0ffd-4643-88f8-cf035445ed40"]),
+      timezone: "Asia/Singapore",
+      inviteCode: UuidV4().generate(),
+    );
+    return await model.insert();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,40 +35,61 @@ class NewGroupFormState extends State<NewGroupForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Padding(padding: const EdgeInsets.symmetric()
-                , child: TextFormField(
+            Padding(
+                padding: const EdgeInsets.symmetric(),
+                child: TextFormField(
+                  controller: groupNameController,
                   decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
-                      labelText: 'Enter your group name'
-                  ),
+                      labelText: 'Enter your group name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Group name must not be empty';
                     }
                     return null;
                   },
-                )
-            ),
+                )),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: ElevatedButton(
                 onPressed: () {
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Successfully created group')),
-                    );
-                    Navigator.pop(context);
+                    _submitForm().then((void _) {
+                      if (!context.mounted) {
+                        return;
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Successfully created group'),
+                        ),
+                      );
+
+                      Navigator.pop(context);
+                    }, onError: (void _) {
+                      if (!context.mounted) {
+                        return;
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Failed to create group, please try again :('),
+                        ),
+                      );
+
+                      Navigator.pop(context);
+                    });
                   }
                 },
                 child: const Text('Confirm'),
               ),
             ),
           ],
-        )
-    );
+        ));
   }
 }

@@ -43,10 +43,10 @@ class MeetupModel {
 
   toMap() {
     return {
-      uuid: uuid,
-      groupId: groupId,
-      location: location,
-      datetime: datetime,
+      "uuid": uuid,
+      "groupId": groupId,
+      "location": location,
+      "datetime": datetime,
     };
   }
 }

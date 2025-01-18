@@ -55,14 +55,14 @@ class AlarmModel {
 
   toMap() {
     return {
-      uuid: uuid,
-      groupId: groupId,
-      meetupId: meetupId,
-      userId: userId,
-      datetime: datetime,
-      sound: sound,
-      snoozeCount: snoozeCount,
-      turnedOff: turnedOff,
+      "uuid": uuid,
+      "groupId": groupId,
+      "meetupId": meetupId,
+      "userId": userId,
+      "datetime": datetime,
+      "sound": sound,
+      "snoozeCount": snoozeCount,
+      "turnedOff": turnedOff,
     };
   }
 }

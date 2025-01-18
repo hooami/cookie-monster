@@ -57,11 +57,11 @@ class GroupModel {
 
   toMap() {
     return {
-      uuid: uuid,
-      title: title,
-      members: members,
-      timezone: timezone,
-      inviteCode: inviteCode,
+      "uuid": uuid,
+      "title": title,
+      "members": members,
+      "timezone": timezone,
+      "inviteCode": inviteCode,
     };
   }
 }
