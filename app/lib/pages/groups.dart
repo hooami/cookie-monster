@@ -87,8 +87,6 @@ class _GroupsState extends State<Groups> {
   }
 
   Widget _groupsList(BuildContext context) {
-    print("Hello 2");
-    print(displayGroups.length);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
