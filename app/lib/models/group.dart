@@ -16,22 +16,45 @@ class GroupModel {
     required this.inviteCode,
   });
 
-  static List<GroupModel> _myGroups = [];
+  static List<GroupModel?> _myGroups = [];
 
-  static Future<List<GroupModel>> getMyGroups(String userUuid) async {
+  static Future<List<GroupModel?>> getMyGroups(String userUuid) async {
     await DbConstants.connect();
-    _myGroups =
-        await DbConstants.groups.find(where.eq("members", userUuid)).map(
-      (group) {
-        return GroupModel(
-          uuid: group["uuid"],
-          title: group["title"],
-          members: List<String>.from(group["members"] as List),
-          timezone: group["timezone"],
-          inviteCode: group["inviteCode"],
-        );
-      },
-    ).toList();
+    _myGroups = await DbConstants.groups
+        .find(where.eq("members", userUuid))
+        .map((group) {
+      var groupModel = _toModel(group);
+      return groupModel;
+    }).toList();
     return _myGroups;
+  }
+
+  Future<void> insert() async {
+    await DbConstants.connect();
+    await DbConstants.groups.insert(toMap());
+  }
+
+  static GroupModel? _toModel(Map<String, dynamic>? groupMap) {
+    if (groupMap == null) {
+      return null;
+    }
+
+    return GroupModel(
+      uuid: groupMap["uuid"],
+      title: groupMap["title"],
+      members: List<String>.from(groupMap["members"] as List),
+      timezone: groupMap["timezone"],
+      inviteCode: groupMap["inviteCode"],
+    );
+  }
+
+  toMap() {
+    return {
+      uuid: uuid,
+      title: title,
+      members: members,
+      timezone: timezone,
+      inviteCode: inviteCode,
+    };
   }
 }

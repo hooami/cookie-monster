@@ -5,6 +5,7 @@ class DbConstants {
 
   static Db? db;
   static final DbCollection groups = db!.collection("groups");
+  static final DbCollection users = db!.collection("users");
 
   static Future<void> connect() async {
     db = await Db.create(DbConstants.dbUrl);
