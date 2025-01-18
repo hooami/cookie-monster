@@ -21,7 +21,6 @@ class NewGroupFormState extends State<NewGroupForm> {
   final groupNameController = TextEditingController();
 
   Future<void> _submitForm() async {
-    groupNameController.text;
     var model = GroupModel(
       uuid: UuidV4().generate(),
       title: groupNameController.text,

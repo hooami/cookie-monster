@@ -8,7 +8,7 @@ class TopBarModel {
   TopBarModel({
     required this.title,
     this.leadingWidget,
-    this.actionsWidget
+    this.actionsWidget,
   });
 
   static List<TopBarModel> options = [
@@ -38,11 +38,15 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
           tooltip: 'Back',
           onPressed: () {
             Navigator.pop(context);
-          }
-      );
+          });
     }
     return AppBar(
-      title: Text(topBarModel.title),
+      title: Text(
+        topBarModel.title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       centerTitle: true,
       leading: topBarModel.leadingWidget,
       actions: topBarModel.actionsWidget,
