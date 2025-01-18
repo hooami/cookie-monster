@@ -4,7 +4,11 @@ import 'package:uuid/v4.dart';
 
 // Create a Form widget.
 class NewGroupForm extends StatefulWidget {
-  const NewGroupForm({super.key});
+  final Function refreshParentPage;
+  const NewGroupForm({
+    super.key,
+    required this.refreshParentPage,
+  });
 
   @override
   NewGroupFormState createState() {
@@ -70,6 +74,7 @@ class NewGroupFormState extends State<NewGroupForm> {
                       );
 
                       Navigator.pop(context);
+                      widget.refreshParentPage();
                     }, onError: (void _) {
                       if (!context.mounted) {
                         return;

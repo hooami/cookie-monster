@@ -52,7 +52,7 @@ class _GroupsState extends State<Groups> {
         future: GroupModel.getMyGroups("32316851-0ffd-4643-88f8-cf035445ed40"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _initData(snapshot);
+            _initData(snapshot.data!);
             return _groupsBody(context, snapshot);
           }
           return const Scaffold();
@@ -60,15 +60,26 @@ class _GroupsState extends State<Groups> {
     ;
   }
 
-  _initData(AsyncSnapshot<List<GroupModel?>> snapshot) {
-    if (initialised) {
+  _initData(List<GroupModel?> groupModelList, {force = false}) {
+    if (initialised && !force) {
       return;
     }
 
     initialised = true;
-    _groups =
-        snapshot.data?.whereType<GroupModel>().toList() as List<GroupModel>;
+    _groups = groupModelList.whereType<GroupModel>().toList();
     displayGroups = UnmodifiableListView(_groups);
+  }
+
+  Future<void> _refreshPage() async {
+    List<GroupModel?> groups =
+        await GroupModel.getMyGroups("32316851-0ffd-4643-88f8-cf035445ed40");
+
+    setState(() {
+      _initData(
+        groups,
+        force: true,
+      );
+    });
   }
 
   Scaffold _groupsBody(
@@ -79,7 +90,9 @@ class _GroupsState extends State<Groups> {
 
     return Scaffold(
       appBar: TopBar(index: 0),
-      floatingActionButton: const GroupSpeedDial(), // Add this line
+      floatingActionButton: GroupSpeedDial(
+        refreshParentPage: _refreshPage,
+      ), // Add this line
       body: Column(
         children: [_searchInput(), _groupsList(context)],
       ),
