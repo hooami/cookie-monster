@@ -152,11 +152,10 @@ class _GroupsState extends State<Groups> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => MeetupsPage(
-                                        groupId: displayGroups[index].uuid,
+                                        group: displayGroups[index],
                                       ),
                                     ),
                                   );
-                                  // TODO: Add navigation
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(

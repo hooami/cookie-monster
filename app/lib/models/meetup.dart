@@ -37,7 +37,7 @@ class MeetupModel {
       uuid: meetupMap["uuid"],
       groupId: meetupMap["groupId"],
       location: meetupMap["location"],
-      datetime: meetupMap["datetime"],
+      datetime: (meetupMap["datetime"] as DateTime).toLocal(),
     );
   }
 

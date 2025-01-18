@@ -1,36 +1,43 @@
 import 'package:app/components/topbar.dart';
+import 'package:app/models/group.dart';
 
 import 'package:app/pages/add_meetup.dart';
-import 'package:app/models/meetup.dart';
+import 'package:app/services/meetup_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart'; // Add this package for date formatting
 
 class MeetupsPage extends StatelessWidget {
-  final String groupId;
-  const MeetupsPage({super.key, required this.groupId});
+  final GroupModel group;
 
-  Future<List<MeetupModel?>> _fetchMeetups() async {
-    try {
-      return await MeetupModel.getMeetupsByGroup(groupId);
-    } catch (e) {
-      debugPrint('Error fetching meetups: $e');
-      throw e; // Let FutureBuilder handle the error
-    }
-  }
-  
+  MeetupsPage({
+    super.key,
+    required this.group,
+  });
+
+  final now = DateTime.now();
+  final backgroundColors = [
+    const Color(0xFFF8F9FE),
+    const Color(0xFFFFE2E5),
+    const Color(0xFFFFF4E4)
+  ];
+  final dateFormatter = DateFormat('EEE, dd MMM yyyy');
+
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    
-    final backgroundColors = [
-      const Color(0xFFF8F9FE),
-      const Color(0xFFFFE2E5),
-      const Color(0xFFFFF4E4)
-    ];
+    final service = MeetupPageService(group: group);
+    return FutureBuilder(
+      future: service.getData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return _meetupsPageBody(context);
+        }
+        return Scaffold();
+      },
+    );
+  }
 
-    final dateFormatter = DateFormat('EEE, dd MMM yyyy');
-
+  Scaffold _meetupsPageBody(BuildContext context) {
     return Scaffold(
       appBar: TopBar(index: 3),
       body: ListView(
