@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:app/components/topbar.dart';
 import 'package:app/models/group.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +13,14 @@ class Groups extends StatefulWidget {
 
 class _GroupsState extends State<Groups> {
   final searchController = TextEditingController();
+  bool initialised = false;
+  List<GroupModel> _groups = [];
+  UnmodifiableListView<GroupModel> displayGroups = UnmodifiableListView([]);
 
   @override
   void initState() {
     super.initState();
+    searchController.addListener(_updateSearch);
   }
 
   @override
@@ -23,16 +29,45 @@ class _GroupsState extends State<Groups> {
     super.dispose();
   }
 
+  void _updateSearch() {
+    setState(() {
+      if (searchController.text == "") {
+        displayGroups = UnmodifiableListView(_groups);
+      } else {
+        displayGroups = UnmodifiableListView(
+          _groups.where((e) {
+            return e.title.toLowerCase().contains(
+                  searchController.text.toLowerCase(),
+                );
+          }),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: GroupModel.getMyGroups("32316851-0ffd-4643-88f8-cf035445ed40"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            _initData(snapshot);
             return _groupsBody(context, snapshot);
           }
           return Scaffold();
         });
+    ;
+  }
+
+  _initData(AsyncSnapshot<List<GroupModel?>> snapshot) {
+    if (initialised) {
+      return;
+    }
+
+    initialised = true;
+    _groups =
+        snapshot.data?.whereType<GroupModel>().toList() as List<GroupModel>;
+    displayGroups = UnmodifiableListView(_groups);
   }
 
   Scaffold _groupsBody(
@@ -41,18 +76,17 @@ class _GroupsState extends State<Groups> {
       throw Exception("expected non-null");
     }
 
-    List<GroupModel> groups =
-        snapshot.data?.whereType<GroupModel>().toList() as List<GroupModel>;
-
     return Scaffold(
       appBar: TopBar(index: 0),
       body: Column(
-        children: [_searchInput(), _groupsList(context, groups)],
+        children: [_searchInput(), _groupsList(context)],
       ),
     );
   }
 
-  Widget _groupsList(BuildContext context, List<GroupModel> groups) {
+  Widget _groupsList(BuildContext context) {
+    print("Hello 2");
+    print(displayGroups.length);
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,7 +104,7 @@ class _GroupsState extends State<Groups> {
               ),
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
-              itemCount: groups.length,
+              itemCount: displayGroups.length,
               itemBuilder: (context, index) {
                 return Card(
                   clipBehavior: Clip.antiAlias,
@@ -96,7 +130,7 @@ class _GroupsState extends State<Groups> {
                             direction: Axis.horizontal,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(groups[index].title),
+                              Text(displayGroups[index].title),
                               Spacer(),
                               GestureDetector(
                                 onTap: () {
