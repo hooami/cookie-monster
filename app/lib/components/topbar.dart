@@ -8,11 +8,12 @@ class TopBarModel {
   TopBarModel({
     required this.title,
     this.leadingWidget,
-    this.actionsWidget,
+    this.actionsWidget
   });
 
   static List<TopBarModel> options = [
     TopBarModel(title: "Groups"),
+    TopBarModel(title: "New Group")
   ];
 }
 
@@ -29,6 +30,15 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     TopBarModel topBarModel = TopBarModel.options[index];
+    if (index == 1) {
+      topBarModel.leadingWidget = IconButton(
+          icon: const Icon(Icons.chevron_left),
+          tooltip: 'Back',
+          onPressed: () {
+            Navigator.pop(context);
+          }
+      );
+    }
     return AppBar(
       title: Text(topBarModel.title),
       centerTitle: true,
