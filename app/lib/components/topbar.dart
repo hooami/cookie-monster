@@ -3,16 +3,12 @@ import 'package:flutter/material.dart';
 class TopBarModel {
   String title;
   Widget? leadingWidget;
-  GestureTapCallback? leadingCallback;
-  Widget? trailingWidget;
-  GestureTapCallback? trailingCallback;
+  List<Widget>? actionsWidget;
 
   TopBarModel({
     required this.title,
     this.leadingWidget,
-    this.leadingCallback,
-    this.trailingWidget,
-    this.trailingCallback,
+    this.actionsWidget,
   });
 
   static List<TopBarModel> options = [
@@ -36,12 +32,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(topBarModel.title),
       centerTitle: true,
-      leading: topBarModel.leadingWidget != null
-          ? GestureDetector(
-              onTap: topBarModel.leadingCallback,
-              child: topBarModel.leadingWidget,
-            )
-          : null,
+      leading: topBarModel.leadingWidget,
+      actions: topBarModel.actionsWidget,
     );
   }
 }
