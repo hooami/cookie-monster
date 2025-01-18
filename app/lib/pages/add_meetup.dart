@@ -1,20 +1,20 @@
 import 'package:app/components/topbar.dart';
 import 'package:flutter/material.dart';
 
-import '../components/new_group_form.dart';
+import '../components/new_meetup_form.dart';
 
-class AddGroupPage extends StatelessWidget {
-  const AddGroupPage({super.key});
+class AddMeetupPage extends StatelessWidget {
+  const AddMeetupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: TopBar(index: 1),
+        appBar: TopBar(index: 2),
         body: Column(
           children: [
             Container(
               margin: EdgeInsets.all(20),
-              child: const NewGroupForm()
+              child: const NewMeetupForm()
             )
           ],
         )
