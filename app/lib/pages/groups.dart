@@ -12,6 +12,11 @@ class Groups extends StatelessWidget {
               margin: EdgeInsets.all(20),
               child: TextField(
                 decoration: InputDecoration(
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(12),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                   filled: true,
                   fillColor: Color.fromRGBO(249, 249, 254, 1),
                   // fillColor: Colors.black,
