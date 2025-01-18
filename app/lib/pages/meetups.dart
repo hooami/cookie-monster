@@ -1,25 +1,34 @@
 import 'package:app/components/topbar.dart';
+
 import 'package:app/pages/add_meetup.dart';
+import 'package:app/models/meetup.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart'; // Add this package for date formatting
 
 class MeetupsPage extends StatelessWidget {
   final String groupId;
+  const MeetupsPage({super.key, required this.groupId});
+
+  Future<List<MeetupModel?>> _fetchMeetups() async {
+    try {
+      return await MeetupModel.getMeetupsByGroup(groupId);
+    } catch (e) {
+      debugPrint('Error fetching meetups: $e');
+      throw e; // Let FutureBuilder handle the error
+    }
+  }
   
-  const MeetupsPage({
-    super.key,
-    required this.groupId,
-  });
-
-
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    
     final backgroundColors = [
       const Color(0xFFF8F9FE),
       const Color(0xFFFFE2E5),
       const Color(0xFFFFF4E4)
     ];
+
     final dateFormatter = DateFormat('EEE, dd MMM yyyy');
 
     return Scaffold(
@@ -35,6 +44,7 @@ class MeetupsPage extends StatelessWidget {
             itemBuilder: (context, parentIndex) {
               final date =
                   dateFormatter.format(now.add(Duration(days: parentIndex)));
+
               return Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
                 child: Column(
@@ -45,7 +55,7 @@ class MeetupsPage extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         )),
-                    const SizedBox(height:10),
+                    const SizedBox(height: 10),
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(
@@ -66,6 +76,7 @@ class MeetupsPage extends StatelessWidget {
                       itemBuilder: (context, childIndex) {
                         final color = backgroundColors[
                             childIndex % backgroundColors.length];
+
                         return Container(
                             color: color,
                             child: ListTile(
