@@ -58,21 +58,20 @@ class _GroupsState extends State<Groups> {
           }
           return const Scaffold();
         });
-    ;
   }
 
-  _initData(List<GroupModel?> groupModelList, {force = false}) {
+  _initData(List<GroupModel> groupModelList, {force = false}) {
     if (initialised && !force) {
       return;
     }
 
     initialised = true;
-    _groups = groupModelList.whereType<GroupModel>().toList();
+    _groups = groupModelList;
     displayGroups = UnmodifiableListView(_groups);
   }
 
   Future<void> _refreshPage() async {
-    List<GroupModel?> groups =
+    List<GroupModel> groups =
         await GroupModel.getMyGroups("32316851-0ffd-4643-88f8-cf035445ed40");
 
     setState(() {

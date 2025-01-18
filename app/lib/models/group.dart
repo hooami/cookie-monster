@@ -16,7 +16,7 @@ class GroupModel {
     required this.inviteCode,
   });
 
-  static List<GroupModel?> _myGroups = [];
+  static List<GroupModel> _myGroups = [];
 
   static Future<GroupModel?> getGroup(String groupId) async {
     await DbConstants.connect();
@@ -25,14 +25,16 @@ class GroupModel {
     );
   }
 
-  static Future<List<GroupModel?>> getMyGroups(String userUuid) async {
+  static Future<List<GroupModel>> getMyGroups(String userUuid) async {
     await DbConstants.connect();
-    _myGroups = await DbConstants.groups
-        .find(where.eq("members", userUuid))
-        .map((group) {
+    _myGroups = (await DbConstants.groups
+            .find(where.eq("members", userUuid))
+            .map((group) {
       var groupModel = _toModel(group);
       return groupModel;
-    }).toList();
+    }).toList())
+        .whereType<GroupModel>()
+        .toList();
     return _myGroups;
   }
 

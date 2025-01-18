@@ -27,13 +27,15 @@ class AlarmModel {
     await DbConstants.alarms.insert(toMap());
   }
 
-  static Future<List<AlarmModel?>> getAlarmsByGroup(String groupId) async {
+  static Future<List<AlarmModel>> getAlarmsByGroup(String groupId) async {
     await DbConstants.connect();
-    return await DbConstants.alarms
-        .find(where.eq("groupId", groupId))
-        .map((alarm) {
-      return _toModel(alarm);
-    }).toList();
+    return (await DbConstants.alarms.find(where.eq("groupId", groupId)).map(
+      (alarm) {
+        return _toModel(alarm);
+      },
+    ).toList())
+        .whereType<AlarmModel>()
+        .toList();
   }
 
   static AlarmModel? _toModel(Map<String, dynamic>? alarmMap) {

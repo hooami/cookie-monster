@@ -1,5 +1,6 @@
 import 'package:app/components/topbar.dart';
 import 'package:app/models/group.dart';
+import 'package:app/models/meetup.dart';
 
 import 'package:app/pages/add_meetup.dart';
 import 'package:app/services/meetup_service.dart';
@@ -7,29 +8,42 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart'; // Add this package for date formatting
 
-class MeetupsPage extends StatelessWidget {
+class MeetupsPage extends StatefulWidget {
   final GroupModel group;
 
-  MeetupsPage({
+  const MeetupsPage({
     super.key,
     required this.group,
   });
 
+  @override
+  State<MeetupsPage> createState() => _MeetupsPageState();
+}
+
+class _MeetupsPageState extends State<MeetupsPage> {
+  MeetupPageData? _data;
+
+  bool initialised = false;
+
   final now = DateTime.now();
+
   final backgroundColors = [
     const Color(0xFFF8F9FE),
     const Color(0xFFFFE2E5),
     const Color(0xFFFFF4E4)
   ];
+
   final dateFormatter = DateFormat('EEE, dd MMM yyyy');
+  final timeFormatter = DateFormat('HH:mm');
 
   @override
   Widget build(BuildContext context) {
-    final service = MeetupPageService(group: group);
+    final service = MeetupPageService(group: widget.group);
     return FutureBuilder(
       future: service.getData(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          _initData(snapshot.data!);
           return _meetupsPageBody(context);
         }
         return Scaffold();
@@ -37,7 +51,18 @@ class MeetupsPage extends StatelessWidget {
     );
   }
 
+  void _initData(MeetupPageData data, {force = false}) {
+    if (initialised && !force) {
+      return;
+    }
+
+    initialised = true;
+    _data = data;
+    print(data.meetups.toString());
+  }
+
   Scaffold _meetupsPageBody(BuildContext context) {
+    List<MeetupModel> meetups = _data!.meetups;
     return Scaffold(
       appBar: TopBar(index: 3),
       body: ListView(
@@ -47,10 +72,14 @@ class MeetupsPage extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
+            itemCount: _data!.meetups.length,
             itemBuilder: (context, parentIndex) {
-              final date =
-                  dateFormatter.format(now.add(Duration(days: parentIndex)));
+              final date = dateFormatter.format(meetups[parentIndex].datetime);
+              final time = timeFormatter.format(meetups[parentIndex].datetime);
+              final meetupData =
+                  _data!.formatMeetupDisplay(meetups[parentIndex]);
+
+              print(meetupData.toString());
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
@@ -71,26 +100,30 @@ class MeetupsPage extends StatelessWidget {
                         color: Color(0xffe8e9f1),
                       ),
                       child: ListTile(
-                        leading: Text('User $parentIndex'),
-                        trailing:
-                            Text('Details about Meetup $parentIndex\nabc'),
+                        leading: Text(time),
+                        trailing: Text(meetups[parentIndex].location),
                       ),
                     ),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 3,
+                      itemCount: meetupData.length,
                       itemBuilder: (context, childIndex) {
                         final color = backgroundColors[
                             childIndex % backgroundColors.length];
 
+                        final displayData = meetupData[childIndex];
                         return Container(
                             color: color,
                             child: ListTile(
-                              leading: Text('User $childIndex'),
-                              title: Text('Meetup $childIndex'),
-                              trailing:
-                                  Text('Details about Meetup $childIndex\nabc'),
+                              leading: Text(displayData.user.name),
+                              title: Text(displayData.alarm.turnedOff
+                                  ? "Awake"
+                                  : "Snooze Count: ${displayData.alarm.snoozeCount}"),
+                              trailing: Text(
+                                timeFormatter
+                                    .format(displayData.alarm.datetime),
+                              ),
                             ));
                       },
                     ),

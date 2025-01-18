@@ -19,13 +19,17 @@ class MeetupModel {
     await DbConstants.meetups.insert(toMap());
   }
 
-  static Future<List<MeetupModel?>> getMeetupsByGroup(String groupId) async {
+  static Future<List<MeetupModel>> getMeetupsByGroup(String groupId) async {
     await DbConstants.connect();
-    return await DbConstants.meetups
-        .find(where.eq("groupId", groupId).sortBy("datetime", descending: true))
-        .map((meetup) {
+    return (await DbConstants.meetups
+            .find(where
+                .eq("groupId", groupId)
+                .sortBy("datetime", descending: true))
+            .map((meetup) {
       return _toModel(meetup);
-    }).toList();
+    }).toList())
+        .whereType<MeetupModel>()
+        .toList();
   }
 
   static MeetupModel? _toModel(Map<String, dynamic>? meetupMap) {
