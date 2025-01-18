@@ -18,6 +18,13 @@ class GroupModel {
 
   static List<GroupModel?> _myGroups = [];
 
+  static Future<GroupModel?> getGroup(String groupId) async {
+    await DbConstants.connect();
+    return _toModel(
+      await DbConstants.groups.findOne(where.eq("uuid", groupId)),
+    );
+  }
+
   static Future<List<GroupModel?>> getMyGroups(String userUuid) async {
     await DbConstants.connect();
     _myGroups = await DbConstants.groups
