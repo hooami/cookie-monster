@@ -4,6 +4,7 @@ import 'package:app/components/topbar.dart';
 import 'package:app/models/group.dart';
 import 'package:flutter/material.dart';
 import 'package:app/components/group_speed_dial.dart'; // Add this import
+import 'package:app/pages/meetups.dart';
 
 class Groups extends StatefulWidget {
   const Groups({super.key});
@@ -134,7 +135,7 @@ class _GroupsState extends State<Groups> {
                               Spacer(),
                               GestureDetector(
                                 onTap: () {
-                                  // TODO: Add navigation
+                                  
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.symmetric(
