@@ -13,7 +13,8 @@ class TopBarModel {
 
   static List<TopBarModel> options = [
     TopBarModel(title: "Groups"),
-    TopBarModel(title: "New Group")
+    TopBarModel(title: "New Group"),
+    TopBarModel(title: "New Meetup")
   ];
 }
 

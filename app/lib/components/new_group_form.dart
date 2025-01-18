@@ -24,11 +24,14 @@ class NewGroupFormState extends State<NewGroupForm> {
                 , child: TextFormField(
                   decoration: InputDecoration(
                       border: UnderlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                      ),
                       labelText: 'Enter your group name'
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Group name can not be empty';
+                      return 'Group name must not be empty';
                     }
                     return null;
                   },
