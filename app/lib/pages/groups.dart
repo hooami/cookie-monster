@@ -1,10 +1,13 @@
 import 'package:app/components/topbar.dart';
 import 'package:app/components/group_search_bar.dart';
+import 'package:app/components/group_speed_dial.dart';
 
-import 'package:app/pages/add_group.dart';
 import 'package:flutter/material.dart';
 
+
 class Groups extends StatelessWidget {
+  const Groups({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,15 +17,7 @@ class Groups extends StatelessWidget {
           GroupSearchBar()
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddGroup()),
-          );
-        },
-        child: const Icon(Icons.add),
-      )
+      floatingActionButton: const GroupSpeedDial(),
     );
   }
 }
