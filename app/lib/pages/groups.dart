@@ -2,6 +2,8 @@ import 'package:app/components/topbar.dart';
 import 'package:flutter/material.dart';
 
 class Groups extends StatelessWidget {
+  const Groups({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +15,13 @@ class Groups extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                      right: 5,
+                      top: 12,
+                      bottom: 12,
+                    ),
+                    child: Icon(Icons.search),
                   ),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 15, horizontal: 20),
