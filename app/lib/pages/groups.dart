@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:app/components/topbar.dart';
 import 'package:app/models/group.dart';
+import 'package:app/pages/meetups.dart';
 import 'package:flutter/material.dart';
 import 'package:app/components/group_speed_dial.dart'; // Add this import
 
@@ -147,6 +148,14 @@ class _GroupsState extends State<Groups> {
                               Spacer(),
                               GestureDetector(
                                 onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeetupsPage(
+                                        groupId: displayGroups[index].uuid,
+                                      ),
+                                    ),
+                                  );
                                   // TODO: Add navigation
                                 },
                                 child: const Padding(
