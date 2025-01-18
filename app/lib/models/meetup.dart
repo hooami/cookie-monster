@@ -5,7 +5,7 @@ class MeetupModel {
   String uuid;
   String groupId;
   String location;
-  String datetime;
+  DateTime datetime;
 
   MeetupModel({
     required this.uuid,

@@ -6,7 +6,7 @@ class AlarmModel {
   String groupId;
   String meetupId;
   String userId;
-  String datetime;
+  DateTime datetime;
   String sound;
   int snoozeCount;
   bool turnedOff;
