@@ -1,6 +1,7 @@
 import 'package:app/components/topbar.dart';
 import 'package:app/models/group.dart';
 import 'package:flutter/material.dart';
+import 'package:app/components/group_speed_dial.dart'; // Add this import
 
 class Groups extends StatefulWidget {
   const Groups({super.key});
@@ -31,7 +32,7 @@ class _GroupsState extends State<Groups> {
           if (snapshot.hasData) {
             return _groupsBody(context, snapshot);
           }
-          return Scaffold();
+          return const Scaffold();
         });
   }
 
@@ -46,6 +47,7 @@ class _GroupsState extends State<Groups> {
 
     return Scaffold(
       appBar: TopBar(index: 0),
+      floatingActionButton: const GroupSpeedDial(), // Add this line
       body: Column(
         children: [_searchInput(), _groupsList(context, groups)],
       ),
@@ -58,14 +60,14 @@ class _GroupsState extends State<Groups> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             constraints: BoxConstraints(
               minHeight: MediaQuery.of(context).size.height -
                   TopBar(index: 0).preferredSize.height -
                   190,
             ),
             child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(
+              separatorBuilder: (context, index) => const SizedBox(
                 height: 15,
               ),
               shrinkWrap: true,
@@ -83,9 +85,9 @@ class _GroupsState extends State<Groups> {
                       ),
                       Expanded(
                         child: Container(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           height: 100,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xFFF8F9FF),
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(15),
@@ -97,18 +99,17 @@ class _GroupsState extends State<Groups> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(groups[index].title),
-                              Spacer(),
+                              const Spacer(),
                               GestureDetector(
                                 onTap: () {
                                   // TODO: Add navigation
                                 },
-                                child: Padding(
+                                child: const Padding(
                                   padding: EdgeInsets.symmetric(
                                     vertical: 5,
                                     horizontal: 2,
                                   ),
-                                  child:
-                                      Icon(Icons.arrow_forward_ios, size: 16),
+                                  child: Icon(Icons.arrow_forward_ios, size: 16),
                                 ),
                               )
                             ],
@@ -128,18 +129,17 @@ class _GroupsState extends State<Groups> {
 
   Container _searchInput() {
     return Container(
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: TextField(
         controller: searchController,
         decoration: InputDecoration(
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(12),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.all(12),
             child: Icon(Icons.search),
           ),
-          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           filled: true,
-          fillColor: Color.fromRGBO(249, 249, 254, 1),
-          // fillColor: Colors.black,
+          fillColor: const Color.fromRGBO(249, 249, 254, 1),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide.none,
