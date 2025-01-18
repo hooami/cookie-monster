@@ -46,7 +46,7 @@ class MeetupModel {
       "uuid": uuid,
       "groupId": groupId,
       "location": location,
-      "datetime": datetime,
+      "datetime": datetime.toUtc(),
     };
   }
 }
