@@ -24,7 +24,7 @@ class GroupSpeedDial extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddGroup()),
+              MaterialPageRoute(builder: (context) => AddGroupPage()),
             );
           },
         ),
