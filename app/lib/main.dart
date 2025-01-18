@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
       ),
-      home: MeetupsPage(groupId: 'a626718c-bc72-483f-80b0-252245b464a6'),
+      home: Groups(),
     );
   }
 }
