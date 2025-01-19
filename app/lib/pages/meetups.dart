@@ -3,6 +3,7 @@ import 'package:app/models/group.dart';
 import 'package:app/models/meetup.dart';
 
 import 'package:app/pages/add_meetup.dart';
+import 'package:app/pages/group_settings.dart';
 import 'package:app/services/meetup_service.dart';
 import 'package:flutter/material.dart';
 
@@ -75,27 +76,11 @@ class _MeetupsPageState extends State<MeetupsPage> {
     return Scaffold(
       appBar: TopBar(index: 3),
       body: ListView(padding: const EdgeInsets.all(16), children: [
-        SegmentedButton(
-          segments: [
-            ButtonSegment(
-              value: MeetupSubPage.meetupTime,
-              label: Text("Meet-up Time"),
-            ),
-            ButtonSegment(
-              value: MeetupSubPage.settings,
-              label: Text("Settings"),
-            ),
-          ],
-          selected: {subpageView},
-          selectedIcon: null,
-          onSelectionChanged: (Set<MeetupSubPage> s) {
-            setState(() {
-              subpageView = s.first;
-            });
-          },
-        ),
+        _subpageSelector(),
         const SizedBox(height: 8),
-        _meetupsList(),
+        subpageView == MeetupSubPage.meetupTime
+            ? _meetupsList()
+            : GroupSettings(),
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -111,6 +96,28 @@ class _MeetupsPageState extends State<MeetupsPage> {
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  SegmentedButton<MeetupSubPage> _subpageSelector() {
+    return SegmentedButton(
+      segments: [
+        ButtonSegment(
+          value: MeetupSubPage.meetupTime,
+          label: Text("Meet-up Time"),
+        ),
+        ButtonSegment(
+          value: MeetupSubPage.settings,
+          label: Text("Settings"),
+        ),
+      ],
+      selected: {subpageView},
+      selectedIcon: null,
+      onSelectionChanged: (Set<MeetupSubPage> s) {
+        setState(() {
+          subpageView = s.first;
+        });
+      },
     );
   }
 
