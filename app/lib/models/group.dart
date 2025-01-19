@@ -125,7 +125,17 @@ class GroupModel {
   }
 
   void updateUserSettings(UserGroupSettingModel userSetting) {
-    userSettings.firstWhereOrNull((s) => s.userId == userSetting.userId);
+    UserGroupSettingModel? oldSettings =
+        userSettings.firstWhereOrNull((s) => s.userId == userSetting.userId);
+
+    if (oldSettings == null) {
+      userSettings.add(userSetting);
+      return;
+    }
+
+    oldSettings.minutesBefore = userSetting.minutesBefore;
+    oldSettings.shouldCreateAlarm = userSetting.shouldCreateAlarm;
+    oldSettings.shouldIgnoreDnd = userSetting.shouldIgnoreDnd;
   }
 
   toMap() {
