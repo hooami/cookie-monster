@@ -60,6 +60,14 @@ class _MeetupsPageState extends State<MeetupsPage> {
     _data = data;
   }
 
+  void _refreshMeetupPage() async {
+    final service = MeetupPageService(group: widget.group);
+    final data = await service.getData();
+    setState(() {
+      _initData(data, force: true);
+    });
+  }
+
   Scaffold _meetupsPageBody(BuildContext context) {
     List<MeetupModel> meetups = _data!.meetups;
     return Scaffold(
@@ -135,7 +143,10 @@ class _MeetupsPageState extends State<MeetupsPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddMeetupPage()),
+            MaterialPageRoute(
+              builder: (context) => AddMeetupPage(
+                  group: widget.group, refreshMeetupPage: _refreshMeetupPage),
+            ),
           );
         },
         child: const Icon(Icons.add),

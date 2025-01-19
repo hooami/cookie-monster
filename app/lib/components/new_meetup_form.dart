@@ -1,10 +1,18 @@
+import 'package:app/models/group.dart';
 import 'package:app/models/meetup.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/v4.dart';
 
 // Create a Form widget.
 class NewMeetupForm extends StatefulWidget {
-  const NewMeetupForm({super.key});
+  final GroupModel group;
+  final Function refreshMeetupPage;
+
+  const NewMeetupForm({
+    super.key,
+    required this.group,
+    required this.refreshMeetupPage,
+  });
 
   @override
   NewMeetupFormState createState() {
@@ -36,7 +44,7 @@ class NewMeetupFormState extends State<NewMeetupForm> {
 
     var model = MeetupModel(
       uuid: UuidV4().generate(),
-      groupId: "",
+      groupId: widget.group.uuid,
       location: _locationController.text,
       datetime: date,
     );
@@ -121,7 +129,9 @@ class NewMeetupFormState extends State<NewMeetupForm> {
                           content: Text('Successfully created meet-up'),
                         ),
                       );
+
                       Navigator.pop(context);
+                      widget.refreshMeetupPage();
                     });
                   }
                 },
