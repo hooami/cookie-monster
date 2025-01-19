@@ -103,7 +103,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                           });
                         },
                         dropdownMenuEntries: List.generate(
-                          24,
+                          12,
                           (index) => DropdownMenuEntry<int>(
                             value: index,
                             label: '$index',
@@ -111,8 +111,6 @@ class _GroupSettingsState extends State<GroupSettings> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    // Minutes Dropdown with 5-minute steps
                     Expanded(
                       child: DropdownMenu<int>(
                         label: const Text('Minutes'),
@@ -125,7 +123,7 @@ class _GroupSettingsState extends State<GroupSettings> {
                           60,
                           (index) => DropdownMenuEntry<int>(
                             value: index,
-                            label: '${index}',
+                            label: '$index',
                           ),
                         ),
                       ),
