@@ -1,7 +1,8 @@
+import 'package:app/models/group.dart';
 import 'package:flutter/material.dart';
 
 class JoinGroupDialog {
-  static void show(BuildContext context) {
+  static void show(BuildContext context, Function refreshParentPage) {
     final TextEditingController codeController = TextEditingController();
 
     showDialog(
@@ -39,9 +40,36 @@ class JoinGroupDialog {
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // TODO: DB CALL GOES HERE
                         final groupCode = codeController.text;
+                        GroupModel? group =
+                            await GroupModel.getGroupByInviteCode(groupCode);
+
+                        if (!context.mounted) {
+                          return;
+                        }
+
+                        if (group == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Failed to join group'),
+                            ),
+                          );
+                          Navigator.pop(context);
+                          return;
+                        }
+
+                        group.members
+                            .add("32316851-0ffd-4643-88f8-cf035445ed40");
+                        await group.save();
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Successfully joined group'),
+                          ),
+                        );
+                        refreshParentPage();
                         Navigator.pop(context);
                       },
                       child: const Text('Join'),

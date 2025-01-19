@@ -43,7 +43,7 @@ class GroupSpeedDial extends StatelessWidget {
           foregroundColor: Colors.white,
           label: 'Join Group',
           onTap: () {
-            JoinGroupDialog.show(context);
+            JoinGroupDialog.show(context, refreshParentPage);
           },
         ),
       ],

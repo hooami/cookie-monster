@@ -66,6 +66,13 @@ class GroupModel {
     );
   }
 
+  static Future<GroupModel?> getGroupByInviteCode(String inviteCode) async {
+    await DbConstants.connect();
+    return _toModel(
+      await DbConstants.groups.findOne(where.eq("inviteCode", inviteCode)),
+    );
+  }
+
   static Future<List<GroupModel>> getMyGroups(String userUuid) async {
     await DbConstants.connect();
     _myGroups = (await DbConstants.groups
