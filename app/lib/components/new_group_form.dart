@@ -28,7 +28,7 @@ class NewGroupFormState extends State<NewGroupForm> {
       timezone: "Asia/Singapore",
       inviteCode: UuidV4().generate(),
     );
-    return await model.insert();
+    return await model.save();
   }
 
   @override
