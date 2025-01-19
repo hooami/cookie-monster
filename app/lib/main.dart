@@ -1,8 +1,9 @@
 import 'package:app/pages/groups.dart';
 import 'package:flutter/material.dart';
-// import 'package:mongo_dart/mongo_dart.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() {
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 

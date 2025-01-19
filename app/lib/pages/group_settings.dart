@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart' as tz;
+
+var timezonesDropdown =
+    tz.timeZoneDatabase.locations.values.map((tz.Location location) {
+  return DropdownMenuEntry(
+    value: location.name,
+    label: location.name,
+  );
+}).toList();
 
 class GroupSettings extends StatefulWidget {
   const GroupSettings({super.key});
@@ -10,7 +19,7 @@ class GroupSettings extends StatefulWidget {
 class _GroupSettingsState extends State<GroupSettings> {
   final TextEditingController timeZoneController = TextEditingController();
   bool alarmEnabled = true;
-  int? selectedTimeZone;
+  String? selectedTimeZone;
   int? selectedHour;
   int? selectedMinute;
 
@@ -25,37 +34,16 @@ class _GroupSettingsState extends State<GroupSettings> {
             )),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
-          child: DropdownMenu<int>(
+          child: DropdownMenu<String>(
             controller: timeZoneController,
             requestFocusOnTap: true,
             label: const Text('Time Zone'),
-            onSelected: (int? timeZone) {
+            onSelected: (String? timeZone) {
               setState(() {
                 selectedTimeZone = timeZone;
               });
             },
-            dropdownMenuEntries: const [
-              DropdownMenuEntry<int>(
-                value: 7,
-                label: 'Thailand (GMT+7)',
-              ),
-              DropdownMenuEntry<int>(
-                value: 8,
-                label: 'Singapore (GMT+8)',
-              ),
-              DropdownMenuEntry<int>(
-                value: 9,
-                label: 'Japan (GMT+9)',
-              ),
-              DropdownMenuEntry<int>(
-                value: 10,
-                label: 'Brisbane (GMT+10)',
-              ),
-              DropdownMenuEntry<int>(
-                value: 11,
-                label: 'Sydney (GMT+11)',
-              ),
-            ],
+            dropdownMenuEntries: timezonesDropdown,
           ),
         ),
         Text('Individual Settings',
