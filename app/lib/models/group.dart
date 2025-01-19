@@ -90,20 +90,37 @@ class GroupModel {
       members: List<String>.from(groupMap["members"] as List),
       timezone: groupMap["timezone"],
       inviteCode: groupMap["inviteCode"],
-      userSettings: List<UserGroupSettingModel>.from(
-        groupMap["userSettings"] as List,
-      ),
+      userSettings: List<Map<String, dynamic>>.from(
+        (groupMap["userSettings"] ?? []) as List,
+      )
+          .map(UserGroupSettingModel._toModel)
+          .whereType<UserGroupSettingModel>()
+          .toList(),
     );
     groupModel._isNew = false;
     return groupModel;
   }
 
   Future<void> save() async {
+    _validateSettings();
     await DbConstants.connect();
     if (_isNew) {
       await DbConstants.groups.insert(toMap());
     } else {
       await DbConstants.groups.replaceOne(where.eq("uuid", uuid), toMap());
+    }
+  }
+
+  _validateSettings() {
+    if (userSettings.length != members.length) {
+      final memberSet = members.toSet();
+      final settingSet = userSettings.map((s) => s.userId).toSet();
+      memberSet.difference(settingSet).forEach((userId) {
+        userSettings.add(UserGroupSettingModel(
+          userId: userId,
+          minutesBefore: 15,
+        ));
+      });
     }
   }
 
@@ -118,7 +135,7 @@ class GroupModel {
       "members": members,
       "timezone": timezone,
       "inviteCode": inviteCode,
-      "userSettings": userSettings,
+      "userSettings": userSettings.map((x) => x.toMap()).toList(),
     };
   }
 }

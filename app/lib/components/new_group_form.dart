@@ -27,6 +27,7 @@ class NewGroupFormState extends State<NewGroupForm> {
       members: List.from(["32316851-0ffd-4643-88f8-cf035445ed40"]),
       timezone: "Asia/Singapore",
       inviteCode: UuidV4().generate(),
+      userSettings: [],
     );
     return await model.save();
   }
