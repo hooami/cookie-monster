@@ -69,76 +69,12 @@ class _MeetupsPageState extends State<MeetupsPage> {
   }
 
   Scaffold _meetupsPageBody(BuildContext context) {
-    List<MeetupModel> meetups = _data!.meetups;
     return Scaffold(
       appBar: TopBar(index: 3),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          const SizedBox(height: 8),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _data!.meetups.length,
-            itemBuilder: (context, parentIndex) {
-              final date = dateFormatter.format(meetups[parentIndex].datetime);
-              final time = timeFormatter.format(meetups[parentIndex].datetime);
-              final meetupData =
-                  _data!.formatMeetupDisplay(meetups[parentIndex]);
-
-              return Container(
-                margin: const EdgeInsets.only(bottom: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(' $date',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    const SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20)),
-                        color: Color(0xffe8e9f1),
-                      ),
-                      child: ListTile(
-                        leading: Text(time),
-                        trailing: Text(meetups[parentIndex].location),
-                      ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: meetupData.length,
-                      itemBuilder: (context, childIndex) {
-                        final color = backgroundColors[
-                            childIndex % backgroundColors.length];
-
-                        final displayData = meetupData[childIndex];
-                        return Container(
-                            color: color,
-                            child: ListTile(
-                              leading: Text(displayData.user.name),
-                              title: Text(displayData.alarm.turnedOff
-                                  ? "Awake"
-                                  : "Snooze Count: ${displayData.alarm.snoozeCount}"),
-                              trailing: Text(
-                                timeFormatter
-                                    .format(displayData.alarm.datetime),
-                              ),
-                            ));
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      body: ListView(padding: const EdgeInsets.all(16), children: [
+        const SizedBox(height: 8),
+        _meetupsList(),
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -151,6 +87,69 @@ class _MeetupsPageState extends State<MeetupsPage> {
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  ListView _meetupsList() {
+    List<MeetupModel> meetups = _data!.meetups;
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _data!.meetups.length,
+      itemBuilder: (context, parentIndex) {
+        final date = dateFormatter.format(meetups[parentIndex].datetime);
+        final time = timeFormatter.format(meetups[parentIndex].datetime);
+        final meetupData = _data!.formatMeetupDisplay(meetups[parentIndex]);
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(' $date',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  )),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  color: Color(0xffe8e9f1),
+                ),
+                child: ListTile(
+                  leading: Text(time),
+                  trailing: Text(meetups[parentIndex].location),
+                ),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: meetupData.length,
+                itemBuilder: (context, childIndex) {
+                  final color =
+                      backgroundColors[childIndex % backgroundColors.length];
+
+                  final displayData = meetupData[childIndex];
+                  return Container(
+                      color: color,
+                      child: ListTile(
+                        leading: Text(displayData.user.name),
+                        title: Text(displayData.alarm.turnedOff
+                            ? "Awake"
+                            : "Snooze Count: ${displayData.alarm.snoozeCount}"),
+                        trailing: Text(
+                          timeFormatter.format(displayData.alarm.datetime),
+                        ),
+                      ));
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
