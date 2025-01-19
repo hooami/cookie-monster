@@ -109,13 +109,12 @@ class _GroupSettingsState extends State<GroupSettings> {
                           dropdownMenuEntries: List.generate(
                             12,
                             (index) => DropdownMenuEntry<int>(
-                              value: index ,
+                              value: index,
                               label: '$index',
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
                       // Minutes Dropdown
                       Expanded(
                         child: DropdownMenu<int>(
@@ -128,8 +127,8 @@ class _GroupSettingsState extends State<GroupSettings> {
                           dropdownMenuEntries: List.generate(
                             60,
                             (index) => DropdownMenuEntry<int>(
-                              value: index*5,
-                              label: '${index *5}',
+                              value: index,
+                              label: '$index',
                             ),
                           ),
                         ),
