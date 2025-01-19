@@ -145,7 +145,7 @@ class _GroupsState extends State<Groups> {
                             direction: Axis.horizontal,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(displayGroups[index].title),
+                              Text("${displayGroups[index].title}\n${displayGroups[index].inviteCode}"),
                               Spacer(),
                               GestureDetector(
                                 onTap: () {
