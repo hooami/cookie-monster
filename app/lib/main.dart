@@ -1,5 +1,7 @@
 import 'package:app/pages/groups.dart';
+import 'package:app/pages/meetups.dart';
 import 'package:flutter/material.dart';
+// import 'package:mongo_dart/mongo_dart.dart';
 
 void main() {
   runApp(const MyApp());

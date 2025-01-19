@@ -16,6 +16,17 @@ class UserModel {
     return _toModel(userMap);
   }
 
+  static Future<List<UserModel>> getUsers(List<String> uuids) async {
+    await DbConstants.connect();
+    return (await DbConstants.users
+            .find(where.oneFrom("uuid", uuids))
+            .map((userMap) {
+      return _toModel(userMap);
+    }).toList())
+        .whereType<UserModel>()
+        .toList();
+  }
+
   static UserModel? _toModel(Map<String, dynamic>? userMap) {
     if (userMap == null) {
       return null;
