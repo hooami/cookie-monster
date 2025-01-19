@@ -17,6 +17,7 @@ class _GroupsState extends State<Groups> {
   final searchController = TextEditingController();
   bool initialised = false;
   List<GroupModel> _groups = [];
+  final List<String> assetStrings = ["assets/fuji_grp_icon.jpeg","assets/bkk.jpg", "assets/aus.jpeg"];
   UnmodifiableListView<GroupModel> displayGroups = UnmodifiableListView([]);
 
   @override
@@ -127,6 +128,7 @@ class _GroupsState extends State<Groups> {
                         width: 100,
                         height: 100,
                         color: Colors.black,
+                        child: Image.asset(assetStrings[index]),
                       ),
                       Expanded(
                         child: Container(
