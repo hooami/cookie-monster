@@ -42,6 +42,7 @@ dependencies:
   alarm: ^4.1.1
   flutter_speed_dial: ^7.0.0
   collection: ^1.19.0
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:
