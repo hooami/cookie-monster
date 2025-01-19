@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart'; // Add this package for date formatting
 
+enum MeetupSubPage { meetupTime, settings }
+
 class MeetupsPage extends StatefulWidget {
   final GroupModel group;
 
@@ -21,6 +23,7 @@ class MeetupsPage extends StatefulWidget {
 }
 
 class _MeetupsPageState extends State<MeetupsPage> {
+  MeetupSubPage subpageView = MeetupSubPage.meetupTime;
   MeetupPageData? _data;
 
   bool initialised = false;
@@ -72,6 +75,25 @@ class _MeetupsPageState extends State<MeetupsPage> {
     return Scaffold(
       appBar: TopBar(index: 3),
       body: ListView(padding: const EdgeInsets.all(16), children: [
+        SegmentedButton(
+          segments: [
+            ButtonSegment(
+              value: MeetupSubPage.meetupTime,
+              label: Text("Meet-up Time"),
+            ),
+            ButtonSegment(
+              value: MeetupSubPage.settings,
+              label: Text("Settings"),
+            ),
+          ],
+          selected: {subpageView},
+          selectedIcon: null,
+          onSelectionChanged: (Set<MeetupSubPage> s) {
+            setState(() {
+              subpageView = s.first;
+            });
+          },
+        ),
         const SizedBox(height: 8),
         _meetupsList(),
       ]),
@@ -81,7 +103,9 @@ class _MeetupsPageState extends State<MeetupsPage> {
             context,
             MaterialPageRoute(
               builder: (context) => AddMeetupPage(
-                  group: widget.group, refreshMeetupPage: _refreshMeetupPage),
+                group: widget.group,
+                refreshMeetupPage: _refreshMeetupPage,
+              ),
             ),
           );
         },
@@ -137,9 +161,11 @@ class _MeetupsPageState extends State<MeetupsPage> {
                       color: color,
                       child: ListTile(
                         leading: Text(displayData.user.name),
-                        title: Text(displayData.alarm.turnedOff
-                            ? "Awake"
-                            : "Snooze Count: ${displayData.alarm.snoozeCount}"),
+                        title: Text(
+                          displayData.alarm.turnedOff
+                              ? "Awake"
+                              : "Snooze Count: ${displayData.alarm.snoozeCount}",
+                        ),
                         trailing: Text(
                           timeFormatter.format(displayData.alarm.datetime),
                         ),
