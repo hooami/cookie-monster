@@ -1,5 +1,42 @@
 import 'package:app/models/db_constants.dart';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:collection/collection.dart';
+
+class UserGroupSettingModel {
+  String userId;
+  int minutesBefore;
+  bool shouldCreateAlarm;
+  bool shouldIgnoreDnd;
+
+  UserGroupSettingModel({
+    required this.userId,
+    required this.minutesBefore,
+    this.shouldCreateAlarm = false,
+    this.shouldIgnoreDnd = false,
+  });
+
+  static UserGroupSettingModel? _toModel(Map<String, dynamic>? settingMap) {
+    if (settingMap == null) {
+      return null;
+    }
+
+    return UserGroupSettingModel(
+      userId: settingMap["userId"],
+      minutesBefore: settingMap["minutesBefore"],
+      shouldCreateAlarm: settingMap["shouldCreateAlarm"],
+      shouldIgnoreDnd: settingMap["shouldIgnoreDnd"],
+    );
+  }
+
+  toMap() {
+    return {
+      "userId": userId,
+      "minutesBefore": minutesBefore,
+      "shouldCreateAlarm": shouldCreateAlarm,
+      "shouldIgnoreDnd": shouldIgnoreDnd,
+    };
+  }
+}
 
 class GroupModel {
   String uuid;
@@ -7,6 +44,9 @@ class GroupModel {
   List<String> members;
   String timezone;
   String inviteCode;
+  List<UserGroupSettingModel> userSettings = [];
+
+  bool _isNew = true;
 
   GroupModel({
     required this.uuid,
@@ -14,6 +54,7 @@ class GroupModel {
     required this.members,
     required this.timezone,
     required this.inviteCode,
+    required this.userSettings,
   });
 
   static List<GroupModel> _myGroups = [];
@@ -38,23 +79,36 @@ class GroupModel {
     return _myGroups;
   }
 
-  Future<void> insert() async {
-    await DbConstants.connect();
-    await DbConstants.groups.insert(toMap());
-  }
-
   static GroupModel? _toModel(Map<String, dynamic>? groupMap) {
     if (groupMap == null) {
       return null;
     }
 
-    return GroupModel(
+    var groupModel = GroupModel(
       uuid: groupMap["uuid"],
       title: groupMap["title"],
       members: List<String>.from(groupMap["members"] as List),
       timezone: groupMap["timezone"],
       inviteCode: groupMap["inviteCode"],
+      userSettings: List<UserGroupSettingModel>.from(
+        groupMap["userSettings"] as List,
+      ),
     );
+    groupModel._isNew = false;
+    return groupModel;
+  }
+
+  Future<void> save() async {
+    await DbConstants.connect();
+    if (_isNew) {
+      await DbConstants.groups.insert(toMap());
+    } else {
+      await DbConstants.groups.replaceOne(where.eq("uuid", uuid), toMap());
+    }
+  }
+
+  void updateUserSettings(UserGroupSettingModel userSetting) {
+    userSettings.firstWhereOrNull((s) => s.userId == userSetting.userId);
   }
 
   toMap() {
@@ -64,6 +118,7 @@ class GroupModel {
       "members": members,
       "timezone": timezone,
       "inviteCode": inviteCode,
+      "userSettings": userSettings,
     };
   }
 }
